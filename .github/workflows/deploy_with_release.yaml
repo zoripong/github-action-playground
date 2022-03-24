@@ -6,11 +6,10 @@ on:
 
 env:
   APP_PROFILE: prod
-  TAG_PREFIX: "api/"
 
 jobs:
   get-image-tag:
-    if: startsWith(github.event.release.tag_name, '${{ env.TAG_PREFIX }}')
+    if: startsWith(github.event.release.tag_name, 'api/')
     name: Generate Image Tag
     runs-on: ubuntu-latest
     outputs:
@@ -29,7 +28,7 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          echo "::set-output name=release_version::${GITHUB_REF#refs/tags/${{ env.TAG_PREFIX }}}"
+          echo "::set-output name=release_version::${GITHUB_REF#refs/tags/api/}"
 
   deploy:
     name: Deploy
