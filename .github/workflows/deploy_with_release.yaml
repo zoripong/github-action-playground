@@ -9,7 +9,7 @@ env:
 
 jobs:
   get-image-tag:
-    if: startsWith(github.event.release.tag_name, "api/")
+    if: startsWith(github.event.release.tag_name, 'api/')
     name: Generate Image Tag
     runs-on: ubuntu-latest
     outputs:
