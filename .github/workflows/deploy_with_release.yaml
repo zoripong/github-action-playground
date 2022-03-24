@@ -10,7 +10,7 @@ env:
 
 jobs:
   get-image-tag:
-    if: startsWith(github.event.release.tag_name, ${{ env.TAG_PREFIX }})
+    if: "startsWith(github.event.release.tag_name, ${{ env.TAG_PREFIX }})"
     name: Generate Image Tag
     runs-on: ubuntu-latest
     outputs:
