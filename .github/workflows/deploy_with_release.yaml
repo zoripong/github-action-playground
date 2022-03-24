@@ -1,0 +1,47 @@
+name: Deploy to production
+
+on:
+  release:
+    types: [published]
+
+env:
+  APP_PROFILE: prod
+  TAG_PREFIX: "api/"
+
+jobs:
+  get-image-tag:
+    if: startsWith(github.event.release.tag_name, ${{ env.TAG_PREFIX }})
+    name: Generate Image Tag
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ env.APP_PROFILE }}-${{ steps.vars.outputs.sha_short }}
+      release_version: ${{ github.event.release.tag_name }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: get image tag
+        id: vars
+        run: |
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}${{ env.TAG_PREFIX }}
+
+  deploy:
+    name: Deploy
+    runs-on: [self-hosted, Linux, X64, prod-k8s-runner]
+    needs: get-image-tag
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: echo variables
+        id: echo_variables
+        run: |
+          echo ${{ needs.get-image-tag.outputs.image_tag }}
+          echo ${{ needs.get-image-tag.outputs.release_version }}
