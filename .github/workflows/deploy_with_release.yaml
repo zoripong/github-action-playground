@@ -27,7 +27,10 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=release_version::${GITHUB_REF#refs/tags/api/}
+        run: |
+          echo ${GITHUB_REF}
+          echo ${GITHUB_REF#refs/tags/api/}
+          echo ::set-output name=release_version::${GITHUB_REF#refs/tags/api/}
 
   deploy:
     name: Deploy
