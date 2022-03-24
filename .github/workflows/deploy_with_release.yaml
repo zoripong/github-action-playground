@@ -31,7 +31,7 @@ jobs:
 
   deploy:
     name: Deploy
-    runs-on: [self-hosted, Linux, X64, prod-k8s-runner]
+    runs-on: ubuntu-latest
     needs: get-image-tag
     steps:
       - name: Checkout
